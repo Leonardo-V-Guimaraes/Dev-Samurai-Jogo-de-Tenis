@@ -1,0 +1,104 @@
+<html>
+    <body>
+        <canvas id="folha" width="600" height="500"></canvas>
+
+        <script>
+            //MSG
+            alert ("Olá");
+            confirm ("Você está pronto?");
+            
+            //função repetição
+            window.onload = function() {
+                setInterval(executar, 1000 / 30);
+            }
+
+            // Var
+            var folhaDesenho = document.getElementById("folha");
+            var areaDesenho = folhaDesenho.getContext("2d");
+            var larguraCampo = 600;
+            var alturaCampo = 500;
+            var larguraLinha = 5;
+            var larguraBola = 15;
+            var alturaRaquete = 50;
+            var espessuraRaquete = 11;
+            var efeitoRaquete = 0.3;
+
+            var posicaoJogador1 = posicaoJogador2 = 40;
+            var posicaoBolaX = posicaoBolaY = 100;
+            var velocidadeBolaPosicaoX = velocidadeBolaPosicaoY = 5 
+            var pontuacaoJogador1 = pontuacaoJogador2 = 0;
+
+            folhaDesenho.addEventListener('mousemove', function(e) {
+                    posicaoJogador1 = e.clientY - alturaRaquete / 2;
+                });
+
+            function executar() {
+
+             // Campo
+                areaDesenho.fillStyle = "#286047"; //cor verde
+                areaDesenho.fillRect(0, 0, larguraCampo, alturaCampo);
+                areaDesenho.fillStyle = "#ffffff"; //cor branca
+                areaDesenho.fillRect(larguraCampo/2 - larguraLinha/2, 0, larguraLinha, alturaCampo);
+
+             // Raquete 1
+                areaDesenho.fillStyle = "#ffffff"; //cor branca
+                areaDesenho.fillRect(0, 250, larguraLinha, alturaRaquete);
+
+             // Raquete 2
+                areaDesenho.fillStyle = "#ffffff"; //cor branca
+                areaDesenho.fillRect(larguraCampo - larguraLinha, 250, larguraLinha, alturaRaquete);
+
+             // Bola
+                areaDesenho.fillStyle = "#ffffff"; //cor branca
+                areaDesenho.fillRect(posicaoBolaX, posicaoBolaY, larguraBola, larguraBola,);
+                posicaoBolaX = posicaoBolaX + velocidadeBolaPosicaoX;
+                posicaoBolaY = posicaoBolaY + velocidadeBolaPosicaoY;
+
+             // Pontuação jogadores
+                areaDesenho.fillText(" Jogador Supremo -" + pontuacaoJogador1 + " pontos", 100, 100);
+                areaDesenho.fillText(" Pc -" + pontuacaoJogador2 + " pontos", larguraCampo - 200, 100);
+            
+             // Verifica lateral superior 
+            if(posicaoBolaY < 0 && velocidadeBolaPosicaoY < 0) {
+                velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;
+            }
+
+             // Verifica lateral inferior
+            if(posicaoBolaY > alturaCampo && velocidadeBolaPosicaoY > 0) {  
+               velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;        
+            }
+
+            // Verifica se o jogador 2 fez um ponto
+            if(posicaoBolaX < 0) {
+             if(posicaoBolaY > posicaoJogador1 && posicaoBolaY < posicaoJogador1 + alturaRaquete) {
+                // Rebater bola
+                velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+
+                var diferencaY = posicaoBolaY - (posicaoJogador1 + alturaRaquete / 2);
+                velocidadeBolaPosicaoY = diferencaY * efeitoRaquete;
+             }  else {
+                 // Pontos jogador 2
+                 potuacaoJogador2 = pontuacaoJogador2 + 1
+                 // Colocar a bola no centro
+             } 
+            }
+
+            // Verifica se o jogador 1 fez ponto
+            if(posicaoBolaX > larguraCampo) {
+             if(posicaoBolaY > posicaoJogador2 && posicaoBolaY < posicaoJogador2 + alturaRaquete) {
+                 // Rebater bola
+                velocidadeBolaPosicaoX = - velocidadeBolaPosicaoX;
+
+                var diferencaY = posicaoBolaY = (posicaoJogador2 + alturaRaquete / 2);
+                velocidadeBolaPosicaoY = diferencaY * efeitoRaquete;
+            } else {
+                 // Pontos do jogador 1
+                pontuacaoJogador1 = pontuacaoJogador1 + 1;
+
+                 // Colocar a bola no centro
+             }
+            }
+            }
+        </script>
+    </body>
+</html>
